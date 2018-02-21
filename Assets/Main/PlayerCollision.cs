@@ -16,7 +16,7 @@ public class PlayerCollision : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-        if (col.gameObject.name == "Cookie")
+        if (col.gameObject.tag == "Cookie")
         {
             //Make it grow
             var playerScale = this.gameObject.transform.localScale.x;
@@ -48,28 +48,60 @@ public class PlayerCollision : MonoBehaviour
         if (col.gameObject.tag == "Powerup")
         {
             //Add script
-            addScript(this.gameObject, col.gameObject.name);
+            // addScript(this.gameObject, col.gameObject.name);
+
+            switch (col.gameObject.name)
+            {
+                case "Fly":
+                    StartCoroutine(UsePowerup<Fly>(5));
+                    break;
+
+                case "Jump":
+                    StartCoroutine(UsePowerup<Jump>(10));
+                    break;
+            }
+
             Destroy(col.gameObject);
         }
 
-        
-        if (col.gameObject.tag == "Bomb")
-        {
+        if (col.gameObject.tag == "Bomb") {
             var bombScript = col.gameObject.GetComponent<BombScript>();
             if( bombScript && !bombScript.isTicking){
                 //Boom!
                 bombScript.isTicking = true;
                 bombScript.Explode();
-            }            
+            }
         }
     }
-    // ne moras programativno dodavati skripte nego samo obj.AddComponent<T>(); di je T type definiran u skripti
-    void addScript(GameObject obj, string ScriptName)
+
+    
+    // IEnumerator Grow(Vector3 targetScale, float duration = 1)
+    // {
+    //     float elapsedTime = 0;
+
+    //     while (elapsedTime <= duration)
+    // }
+
+    IEnumerator UsePowerup<T>(float duration) where T : MonoBehaviour
     {
-        System.Type ScriptType = System.Type.GetType(ScriptName + ",Assembly-CSharp");
-        if (!obj.GetComponent(ScriptName))
-        {
-            obj.AddComponent(ScriptType);
-        }
+        // Remove an existing powerup of the same type
+        var powerup = gameObject.GetComponent<T>();
+        if (powerup != null) Destroy(powerup);
+
+        // Add a new powerup and set its expiry
+        powerup = gameObject.AddComponent<T>();
+        yield return new WaitForSeconds(duration);
+        Destroy(powerup);
     }
+
+    // ne moras programativno dodavati skripte nego samo obj.AddComponent<T>(); di je T type definiran u skripti
+
+    // void addScript(GameObject obj, string ScriptName)
+    // {
+    //     System.Type ScriptType = System.Type.GetType(ScriptName + ",Assembly-CSharp");
+    //     if (!obj.GetComponent(ScriptName))
+    //     {
+    //         obj.AddComponent(ScriptType);
+    //     }
+    // }
 }

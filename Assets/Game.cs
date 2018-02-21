@@ -25,19 +25,19 @@ public class Game : MonoBehaviour {
 	void Start () {
 		GameGridRadius = 20;
 
-		maxCookies = 100;
+		maxCookies = 40;
 		InvokeRepeating("CreateCookie", 2.0f, 0.3f);
 		InvokeRepeating("CreateCookie", 2.0f, 2f);
 		
-		maxPowerups = 20;
+		maxPowerups = 10;
 		InvokeRepeating("CreatePowerup", 2.0f, 0.3f);
 		InvokeRepeating("CreatePowerup", 2.0f, 2f);
 
-		maxRocks = 200;
+		maxRocks = 100;
 		InvokeRepeating("CreateRock", 2.0f, 0.03f);
 		InvokeRepeating("CreateRock", 2.0f, 2f);
 
-		maxBombs = 30;
+		maxBombs = 10;
 		InvokeRepeating("CreateBomb", 2.0f, 0.03f);
 		InvokeRepeating("CreateBomb", 2.0f, 10f);
 
@@ -104,11 +104,11 @@ public class Game : MonoBehaviour {
 		// If less rocks than maxRocks, set destroy on the smallest
 		if(rocks.GetLength(0) >= maxRocks) {
 			GameObject smallestRock = new GameObject();
-			RockScript smallestRockScript;
+			RockScript smallestRockScript = new RockScript();
 			bool smallestRockExists  = false;
 
 			foreach (GameObject rock in rocks) {
-				if(rock.transform.localScale.x < smallestRock.transform.localScale.x){
+				if(rock.transform.localScale.x < smallestRock.transform.localScale.x) {
 					smallestRock = rock;
 					smallestRockScript = smallestRock.GetComponent<RockScript>();
 					smallestRockExists = true;
@@ -126,7 +126,7 @@ public class Game : MonoBehaviour {
 			newRock.tag = "Rock";
 			newRock.name = "Rock";
 
-			float rockScale = Random.Range(1f * sizeDeviation * playerScale, 3f*playerScale);
+			float rockScale = Random.Range(1f / sizeDeviation * playerScale, sizeDeviation * playerScale);
 			Animate.Scale(newRock, new Vector3(rockScale, rockScale, rockScale));
 		}
 	}
