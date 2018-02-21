@@ -23,7 +23,7 @@ RenderSettings:
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
-  m_AmbientIntensity: 0
+  m_AmbientIntensity: 3.63
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 2100000, guid: b13109bc4674dd24ebc04b7c12437ad6, type: 2}
@@ -336,14 +336,14 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 517312901}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.21, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1653537912}
   - {fileID: 183243768}
   - {fileID: 764006973}
   m_Father: {fileID: 1788039213}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &517312907
 Rigidbody:
@@ -741,7 +741,7 @@ Transform:
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children: []
   m_Father: {fileID: 1788039213}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1588062485
 MonoBehaviour:
@@ -853,8 +853,10 @@ MonoBehaviour:
   rock: {fileID: 1850161195149472, guid: 8b0a02e62b8d0494f9cbc2ea7c00ae68, type: 2}
   bomb: {fileID: 1850161195149472, guid: 0f0f86236af48d74a94311fc4c9b94a7, type: 2}
   player: {fileID: 517312901}
-  floor: {fileID: 1588062478}
+  floor: {fileID: 1980833526668334, guid: aa57d068bedc6294da295894098e4f1a, type: 2}
+  floors: []
   GameGridRadius: 0
+  GameMaxScaleDifference: 0
 --- !u!4 &1788039213
 Transform:
   m_ObjectHideFlags: 0
@@ -868,8 +870,8 @@ Transform:
   - {fileID: 1957989463}
   - {fileID: 563784264}
   - {fileID: 1317840888}
-  - {fileID: 1588062483}
   - {fileID: 517312906}
+  - {fileID: 1588062483}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

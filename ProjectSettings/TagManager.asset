@@ -8,6 +8,7 @@ TagManager:
   - Cookie
   - Rock
   - Bomb
+  - Floor
   layers:
   - Default
   - TransparentFX

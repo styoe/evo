@@ -8,7 +8,7 @@ public class Game : MonoBehaviour {
 
 	public GameObject powerup;
 	private int maxPowerups;
-	string[] powerups = new string[] {"Fly", "Jump"};
+	string[] powerupTypes = new string[] {"Fly", "Jump"};
 
 	public GameObject rock;
 	private int maxRocks;
@@ -22,12 +22,14 @@ public class Game : MonoBehaviour {
 	public List <GameObject> floors;
 
 	public float GameGridRadius;
+	public float GameMaxScaleDifference;
 
 	void Start () {
-		GameGridRadius = 5;
+		GameGridRadius = 50;
+		GameMaxScaleDifference = 10;
 
 		floors = new List<GameObject>();
-		// InvokeRepeating("CreateFloor", 0f, 1f);
+		InvokeRepeating("CreateFloor", 0f, 1f);
 
 		maxCookies = 40;
 		InvokeRepeating("CreateCookie", 2.0f, 0.3f);
@@ -68,57 +70,68 @@ public class Game : MonoBehaviour {
 		}
 	}
 
-	// void CreateFloor(){
-	// 	var playerPos = player.transform.localPosition;
+	Vector3 GetRandomInGameGridRadius() {
+		var pos = player.transform.localPosition;
+		return new Vector3(Random.Range(pos.x - GameGridRadius, pos.x + GameGridRadius), 1, Random.Range(pos.z - GameGridRadius, pos.z + GameGridRadius));
+	}
 
-	// 	var floorsInRadius = 2f;
-	// 	var floorScale = 10f * Mathf.Round(player.transform.localScale.x);
-	// 	var playerClosestX = Mathf.Round(playerPos.x / floorScale) * floorScale;
-	// 	var playerClosestZ = Mathf.Round(playerPos.z / floorScale) * floorScale;
+	void CreateFloor(){
+		var playerPos = player.transform.localPosition;
 
-	// 	Debug.Log(playerClosestX);
-	// 	Debug.Log(playerClosestZ);
+		var floorsInRadius = 1f;
+		var floorScale = 100f;
+		var playerClosestX = Mathf.Round(playerPos.x / floorScale) * floorScale;
+		var playerClosestZ = Mathf.Round(playerPos.z / floorScale) * floorScale;
 		
-	// 	// Destroy floors out of range
-	// 	foreach(var floorInstance in floors.ToArray()){
-	// 		var floorInstancePos = floorInstance.transform.localPosition;
-	// 		if(
-	// 			floorInstancePos.x < playerClosestX - floorsInRadius * floorScale
-	// 		 	|| floorInstancePos.x > playerClosestX + floorsInRadius * floorScale
-	// 		 	|| floorInstancePos.z < playerClosestZ - floorsInRadius * floorScale
-	// 		 	|| floorInstancePos.z > playerClosestZ+ floorsInRadius * floorScale
-	// 		 ) {
-	// 			floors.Remove(floorInstance);
-	// 			Destroy(floorInstance);
-	// 		 }
-	// 	}
+		// Destroy floors out of range
+		foreach(var floorInstance in floors.ToArray()){
+			var floorInstancePos = floorInstance.transform.localPosition;
+			if(
+				floorInstancePos.x < playerClosestX - floorsInRadius * floorScale
+			 	|| floorInstancePos.x > playerClosestX + floorsInRadius * floorScale
+			 	|| floorInstancePos.z < playerClosestZ - floorsInRadius * floorScale
+			 	|| floorInstancePos.z > playerClosestZ+ floorsInRadius * floorScale
+			 ) {
+				floors.Remove(floorInstance);
+				Destroy(floorInstance);
+			 }
+		}
 
-	// 	// Create floors in range
-	// 	for(var x = playerClosestX - floorsInRadius * floorScale; x <= playerClosestX + floorsInRadius * floorScale; x += floorScale) {
-	// 		for(var z = playerClosestZ - floorsInRadius * floorScale; z <= playerClosestZ + floorsInRadius * floorScale; z += floorScale) {
-	// 			bool floorExists = floors.Exists(m => m.transform.localPosition.x == x && m.transform.localPosition.z == z);
+		// Create floors in range
+		for(var x = playerClosestX - floorsInRadius * floorScale; x <= playerClosestX + floorsInRadius * floorScale; x += floorScale) {
+			for(var z = playerClosestZ - floorsInRadius * floorScale; z <= playerClosestZ + floorsInRadius * floorScale; z += floorScale) {
+				bool floorExists = floors.Exists(m => m.transform.localPosition.x == x && m.transform.localPosition.z == z);
 
-	// 			if(!floorExists){
-	// 				var newFloor = Instantiate(floor, new Vector3(x, 0, z), Quaternion.identity);
-	// 				newFloor.name = "Floor";
-	// 				// newFloor.GetComponent<Renderer>().bounds = new Vector3(floorScale, 0,  floorScale);
-	// 				// Debug.Log();
-	// 				newFloor.tag = "Floor";
-	// 				newFloor.transform.localScale = new Vector3(0.1f * floorScale, 0.1f, 0.1f * floorScale);
-	// 				floors.Add(newFloor);
-	// 			}
-	// 		}
-	// 	}
-	// }
+				if(!floorExists){
+					var newFloor = Instantiate(floor, new Vector3(x, 0, z), Quaternion.identity);
+					newFloor.name = "Floor";
+					// newFloor.GetComponent<Renderer>().bounds = new Vector3(floorScale, 0,  floorScale);
+					// Debug.Log();
+					newFloor.tag = "Floor";
+					newFloor.transform.localScale = new Vector3(0.1f * floorScale, 0.1f, 0.1f * floorScale);
+					floors.Add(newFloor);
+				}
+			}
+		}
+	}
 
 	void CreateCookie () {
-		if(GameObject.FindGameObjectsWithTag("Cookie").GetLength(0) < maxCookies) {
+		var cookies = GameObject.FindGameObjectsWithTag("Cookie");
+
+		// Destroy the ones out of range
+		foreach(var c in cookies){
+			if(Vector3.Distance(player.transform.localPosition, c.transform.localPosition) > GameGridRadius || Vector3.Distance(player.transform.localScale, c.transform.localScale) > GameMaxScaleDifference) {
+				Destroy(c);
+			}
+		}
+
+		if(cookies.GetLength(0) < maxCookies) {
 			var playerScale = player.transform.localScale.x;
-			var newCookie = Instantiate(cookie, new Vector3(Random.Range(-1 * GameGridRadius * playerScale, 20*playerScale), 1, Random.Range(-20*playerScale, 20*playerScale)), Quaternion.identity);
+			var newCookie = Instantiate(cookie, GetRandomInGameGridRadius(), Quaternion.identity);
 			newCookie.name = "Cookie";
 			newCookie.tag = "Cookie";
 
-			float cookieScale = Random.Range(0.3f*playerScale, 3f*playerScale);
+			float cookieScale = Random.Range(0.3f * playerScale, 3f * playerScale);
 			Animate.Scale(newCookie, new Vector3(cookieScale, cookieScale, cookieScale));
 
 			// var cookieSphereCollider = newCookie.gameObject.GetComponent<SphereCollider>(); 
@@ -128,10 +141,21 @@ public class Game : MonoBehaviour {
 	}
 
 	void CreatePowerup () {
-		if(GameObject.FindGameObjectsWithTag("Powerup").GetLength(0) < maxPowerups){
+		var powerups = GameObject.FindGameObjectsWithTag("Powerup");
+
+		// Destroy the ones out of range
+		foreach(var p in powerups){
+			if(Vector3.Distance(player.transform.localPosition, p.transform.localPosition) > GameGridRadius  || Vector3.Distance(player.transform.localScale, p.transform.localScale) > GameMaxScaleDifference) {
+				Destroy(p);
+			}
+		}
+
+		if(powerups.GetLength(0) < maxPowerups){
 			var playerScale = player.transform.localScale.x;
-			var newPowerup = Instantiate(powerup, new Vector3(Random.Range(-1 * GameGridRadius, GameGridRadius), 1, Random.Range(-1 * GameGridRadius, GameGridRadius)), Quaternion.identity); 
-			var powerupType = powerups[Random.Range(0, powerups.Length)];
+			var xRange =  + GameGridRadius;
+
+			var newPowerup = Instantiate(powerup, GetRandomInGameGridRadius(), Quaternion.identity); 
+			var powerupType = powerupTypes[Random.Range(0, powerupTypes.Length)];
 			newPowerup.name = powerupType;
 			newPowerup.tag = "Powerup";
 			newPowerup.transform.rotation = new Quaternion(-90, 0, 0, 0);
@@ -148,6 +172,13 @@ public class Game : MonoBehaviour {
 		var playerScale = player.transform.localScale.x;
 		var rocks = GameObject.FindGameObjectsWithTag("Rock");
 		var sizeDeviation = 3f;
+
+		// Destroy the ones out of range
+		foreach(var r in rocks){
+			if(Vector3.Distance(player.transform.localPosition, r.transform.localPosition) > GameGridRadius || Vector3.Distance(player.transform.localScale, r.transform.localScale) > GameMaxScaleDifference) {
+				Destroy(r);
+			}
+		}
 		
 		// If less rocks than maxRocks, set destroy on the smallest
 		if(rocks.GetLength(0) >= maxRocks) {
@@ -170,7 +201,7 @@ public class Game : MonoBehaviour {
 
 		// Create a rock
 		if(rocks.GetLength(0) < maxRocks) {
-			var newRock = Instantiate(rock, new Vector3(Random.Range(-1 * GameGridRadius * playerScale, GameGridRadius * playerScale), 1, Random.Range(-1 * GameGridRadius * playerScale / 5, GameGridRadius * playerScale  / 5)), Quaternion.identity);
+			var newRock = Instantiate(rock, GetRandomInGameGridRadius(), Quaternion.identity);
 			newRock.tag = "Rock";
 			newRock.name = "Rock";
 
@@ -180,10 +211,19 @@ public class Game : MonoBehaviour {
 	}
 
 	void CreateBomb () {
-		if(GameObject.FindGameObjectsWithTag("Bomb").GetLength(0) < maxBombs){
+		var bombs = GameObject.FindGameObjectsWithTag("Bomb");
+
+		// Destroy the ones out of range
+		foreach(var b in bombs){
+			if(Vector3.Distance(player.transform.localPosition, b.transform.localPosition) > GameGridRadius || Vector3.Distance(player.transform.localScale, b.transform.localScale) > GameMaxScaleDifference) {
+				Destroy(b);
+			}
+		}
+
+		if(bombs.GetLength(0) < maxBombs){
 			var playerScale = player.transform.localScale.x;
 			// var newBomb = Instantiate(bomb, new Vector3(Random.Range(-3*playerScale, 3*playerScale), 1, Random.Range(-3*playerScale, 3*playerScale)), Quaternion.identity);
-			var newBomb = Instantiate(bomb, new Vector3(Random.Range(-1 * GameGridRadius * playerScale, GameGridRadius * playerScale), 1, Random.Range(-1 * GameGridRadius * playerScale, GameGridRadius * playerScale)), Quaternion.identity);
+			var newBomb = Instantiate(bomb, GetRandomInGameGridRadius(), Quaternion.identity);
 			newBomb.tag = "Bomb";
 			newBomb.name = "Bomb";
 
