@@ -19,11 +19,15 @@ public class Game : MonoBehaviour {
 	public GameObject player;
 
 	public GameObject floor;
+	public List <GameObject> floors;
 
 	public float GameGridRadius;
 
 	void Start () {
-		GameGridRadius = 20;
+		GameGridRadius = 5;
+
+		floors = new List<GameObject>();
+		// InvokeRepeating("CreateFloor", 0f, 1f);
 
 		maxCookies = 40;
 		InvokeRepeating("CreateCookie", 2.0f, 0.3f);
@@ -40,6 +44,7 @@ public class Game : MonoBehaviour {
 		maxBombs = 10;
 		InvokeRepeating("CreateBomb", 2.0f, 0.03f);
 		InvokeRepeating("CreateBomb", 2.0f, 10f);
+
 
 		var ExplosionCenter = new Vector3(2, 2, 2);	
 		float ExplosionRange = 10f;
@@ -62,6 +67,49 @@ public class Game : MonoBehaviour {
 			floor.transform.localScale = new Vector3(floorScale, floorScale, floorScale);
 		}
 	}
+
+	// void CreateFloor(){
+	// 	var playerPos = player.transform.localPosition;
+
+	// 	var floorsInRadius = 2f;
+	// 	var floorScale = 10f * Mathf.Round(player.transform.localScale.x);
+	// 	var playerClosestX = Mathf.Round(playerPos.x / floorScale) * floorScale;
+	// 	var playerClosestZ = Mathf.Round(playerPos.z / floorScale) * floorScale;
+
+	// 	Debug.Log(playerClosestX);
+	// 	Debug.Log(playerClosestZ);
+		
+	// 	// Destroy floors out of range
+	// 	foreach(var floorInstance in floors.ToArray()){
+	// 		var floorInstancePos = floorInstance.transform.localPosition;
+	// 		if(
+	// 			floorInstancePos.x < playerClosestX - floorsInRadius * floorScale
+	// 		 	|| floorInstancePos.x > playerClosestX + floorsInRadius * floorScale
+	// 		 	|| floorInstancePos.z < playerClosestZ - floorsInRadius * floorScale
+	// 		 	|| floorInstancePos.z > playerClosestZ+ floorsInRadius * floorScale
+	// 		 ) {
+	// 			floors.Remove(floorInstance);
+	// 			Destroy(floorInstance);
+	// 		 }
+	// 	}
+
+	// 	// Create floors in range
+	// 	for(var x = playerClosestX - floorsInRadius * floorScale; x <= playerClosestX + floorsInRadius * floorScale; x += floorScale) {
+	// 		for(var z = playerClosestZ - floorsInRadius * floorScale; z <= playerClosestZ + floorsInRadius * floorScale; z += floorScale) {
+	// 			bool floorExists = floors.Exists(m => m.transform.localPosition.x == x && m.transform.localPosition.z == z);
+
+	// 			if(!floorExists){
+	// 				var newFloor = Instantiate(floor, new Vector3(x, 0, z), Quaternion.identity);
+	// 				newFloor.name = "Floor";
+	// 				// newFloor.GetComponent<Renderer>().bounds = new Vector3(floorScale, 0,  floorScale);
+	// 				// Debug.Log();
+	// 				newFloor.tag = "Floor";
+	// 				newFloor.transform.localScale = new Vector3(0.1f * floorScale, 0.1f, 0.1f * floorScale);
+	// 				floors.Add(newFloor);
+	// 			}
+	// 		}
+	// 	}
+	// }
 
 	void CreateCookie () {
 		if(GameObject.FindGameObjectsWithTag("Cookie").GetLength(0) < maxCookies) {
