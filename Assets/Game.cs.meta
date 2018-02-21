@@ -5,7 +5,13 @@ licenseType: Free
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - cookie: {fileID: 1850161195149472, guid: cd0d3f075a6c0d74a8f494ebe0a7468d, type: 2}
+  - powerup: {fileID: 1085647681386172, guid: a9faefdaf042b9a4693546e01b753ae5, type: 2}
+  - rock: {fileID: 1850161195149472, guid: 8b0a02e62b8d0494f9cbc2ea7c00ae68, type: 2}
+  - bomb: {fileID: 1850161195149472, guid: 0f0f86236af48d74a94311fc4c9b94a7, type: 2}
+  - player: {fileID: 1850161195149472, guid: 0f0f86236af48d74a94311fc4c9b94a7, type: 2}
+  - floor: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

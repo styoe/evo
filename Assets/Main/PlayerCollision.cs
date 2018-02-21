@@ -32,14 +32,11 @@ public class PlayerCollision : MonoBehaviour
                 float newPlayerScale = newPlayerRadius * 2;
                 float scaleIncrement = newPlayerScale - playerScale;
 
-                Debug.Log(scaleIncrement);
-                Debug.Log(newPlayerScale);
-
                 // Set scale and radius of player
                 // this.gameObject.transform.localScale = new Vector3(scaleIncrement, scaleIncrement, scaleIncrement);
                 // sphereColider.radius = newPlayerRadius;
 
-                StartCoroutine(Grow(new Vector3(scaleIncrement, scaleIncrement, scaleIncrement)));
+                Animate.Scale(this.gameObject, new Vector3(scaleIncrement, scaleIncrement, scaleIncrement));
 
                 //destroy cookie
                 Destroy(col.gameObject);
@@ -54,24 +51,18 @@ public class PlayerCollision : MonoBehaviour
             addScript(this.gameObject, col.gameObject.name);
             Destroy(col.gameObject);
         }
-    }
 
-
-    IEnumerator Grow(Vector3 targetScale)
-    {
-        float duration = 1;
-        float elapsedTime = 0;
-
-        while (elapsedTime <= duration)
+        
+        if (col.gameObject.tag == "Bomb")
         {
-            transform.localScale = Vector3.Lerp(transform.localScale, targetScale, elapsedTime / duration);
-            elapsedTime += Time.deltaTime;
-            yield return new WaitForEndOfFrame();
+            var bombScript = col.gameObject.GetComponent<BombScript>();
+            if( bombScript && !bombScript.isTicking){
+                //Boom!
+                bombScript.isTicking = true;
+                bombScript.Explode();
+            }            
         }
-
-        transform.localScale = targetScale;
     }
-
     // ne moras programativno dodavati skripte nego samo obj.AddComponent<T>(); di je T type definiran u skripti
     void addScript(GameObject obj, string ScriptName)
     {
