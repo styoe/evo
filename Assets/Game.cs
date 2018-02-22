@@ -166,7 +166,6 @@ public class Game : MonoBehaviour
             newEnemy.tag = "Cookie";
 
             float enemyScale = Random.Range(0.3f * playerScale, 3f * playerScale);
-            newEnemy.GetComponent<NavMeshAgent>().radius = enemyScale;
             Animate.Scale(newEnemy, new Vector3(enemyScale, enemyScale, enemyScale));
 
             // var cookieSphereCollider = newEnemy.gameObject.GetComponent<SphereCollider>(); 
