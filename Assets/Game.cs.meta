@@ -11,7 +11,7 @@ MonoImporter:
   - rock: {fileID: 1850161195149472, guid: 8b0a02e62b8d0494f9cbc2ea7c00ae68, type: 2}
   - bomb: {fileID: 1850161195149472, guid: 0f0f86236af48d74a94311fc4c9b94a7, type: 2}
   - player: {fileID: 1850161195149472, guid: 0f0f86236af48d74a94311fc4c9b94a7, type: 2}
-  - floor: {instanceID: 0}
+  - floor: {fileID: 1980833526668334, guid: aa57d068bedc6294da295894098e4f1a, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

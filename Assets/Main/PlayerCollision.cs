@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerCollision : MonoBehaviour
 {
-
     private int cookiesEaten;
     private SphereCollider sphereColider;
 
@@ -64,9 +63,11 @@ public class PlayerCollision : MonoBehaviour
             Destroy(col.gameObject);
         }
 
-        if (col.gameObject.tag == "Bomb") {
+        if (col.gameObject.tag == "Bomb")
+        {
             var bombScript = col.gameObject.GetComponent<BombScript>();
-            if( bombScript && !bombScript.isTicking){
+            if (bombScript && !bombScript.isTicking)
+            {
                 //Boom!
                 bombScript.isTicking = true;
                 bombScript.Explode();
@@ -74,7 +75,7 @@ public class PlayerCollision : MonoBehaviour
         }
     }
 
-    
+
     // IEnumerator Grow(Vector3 targetScale, float duration = 1)
     // {
     //     float elapsedTime = 0;
