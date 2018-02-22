@@ -15,10 +15,10 @@ public class PlayerCollision : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-        if (col.gameObject.tag == "Cookie")
+        if (col.gameObject.CompareTag("Cookie"))
         {
             //Make it grow
-            var playerScale = this.gameObject.transform.localScale.x;
+            var playerScale = transform.localScale.x;
             var cookieScale = col.gameObject.transform.localScale.x;
 
             if (playerScale > cookieScale)
@@ -35,13 +35,18 @@ public class PlayerCollision : MonoBehaviour
                 // this.gameObject.transform.localScale = new Vector3(scaleIncrement, scaleIncrement, scaleIncrement);
                 // sphereColider.radius = newPlayerRadius;
 
-                Animate.Scale(this.gameObject, new Vector3(scaleIncrement, scaleIncrement, scaleIncrement));
+                Animate.Scale(gameObject, new Vector3(scaleIncrement, scaleIncrement, scaleIncrement));
 
                 //destroy cookie
                 Destroy(col.gameObject);
 
                 cookiesEaten += 1;
             }
+        }
+
+        if (col.gameObject.CompareTag("Enemy"))
+        {
+            transform.localScale += new Vector3(0.1f, 0.1f, 0.1f);
         }
 
         if (col.gameObject.tag == "Powerup")
