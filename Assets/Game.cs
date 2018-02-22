@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.AI;
 
 public class Game : MonoBehaviour
 {
     public GameObject cookie;
     private int maxCookies;
-
-    static event Action<int> OnUpdate;
 
     public GameObject powerup;
     private int maxPowerups;
@@ -25,6 +24,9 @@ public class Game : MonoBehaviour
     public GameObject floor;
     public List<GameObject> floors;
 
+    const int maxEnemies = 80;
+    GameObject enemy;
+
     public float GameGridRadiusInitial;
     public float GameGridRadius;
     public float GameMaxScaleDifference;
@@ -35,8 +37,13 @@ public class Game : MonoBehaviour
         GameGridRadius = 50;
         GameMaxScaleDifference = 10;
 
+        enemy = Resources.Load("Enemy") as GameObject;
+
         floors = new List<GameObject>();
         InvokeRepeating("CreateFloor", 0f, 1f);
+
+        InvokeRepeating("CreateEnemy", 2, 0.3f);
+        InvokeRepeating("CreateEnemy", 2, 2);
 
         maxCookies = 80;
         InvokeRepeating("CreateCookie", 2.0f, 0.3f);
@@ -135,6 +142,36 @@ public class Game : MonoBehaviour
                     floors.Add(newFloor);
                 }
             }
+        }
+    }
+
+    void CreateEnemy()
+    {
+        var enemies = GameObject.FindGameObjectsWithTag("Cookie");
+
+        // Destroy the ones out of range
+        foreach (var c in enemies)
+        {
+            if (Vector3.Distance(player.transform.localPosition, c.transform.localPosition) > GameGridRadius || Vector3.Distance(player.transform.localScale, c.transform.localScale) > GameMaxScaleDifference)
+            {
+                Destroy(c);
+            }
+        }
+
+        if (enemies.GetLength(0) < maxEnemies)
+        {
+            var playerScale = player.transform.localScale.x;
+            var newEnemy = Instantiate(enemy, GetRandomInGameGridRadius(), Quaternion.identity);
+            newEnemy.name = "Cookie";
+            newEnemy.tag = "Cookie";
+
+            float enemyScale = Random.Range(0.3f * playerScale, 3f * playerScale);
+            newEnemy.GetComponent<NavMeshAgent>().radius = enemyScale;
+            Animate.Scale(newEnemy, new Vector3(enemyScale, enemyScale, enemyScale));
+
+            // var cookieSphereCollider = newEnemy.gameObject.GetComponent<SphereCollider>(); 
+            // Debug.Log(cookieScale);
+            // cookieSphereCollider.radius = cookieScale / 2f; 
         }
     }
 

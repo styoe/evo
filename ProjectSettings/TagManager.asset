@@ -9,6 +9,7 @@ TagManager:
   - Rock
   - Bomb
   - Floor
+  - Enemy
   layers:
   - Default
   - TransparentFX
