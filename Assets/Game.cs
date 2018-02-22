@@ -21,29 +21,31 @@ public class Game : MonoBehaviour {
 	public GameObject floor;
 	public List <GameObject> floors;
 
+	public float GameGridRadiusInitial;
 	public float GameGridRadius;
 	public float GameMaxScaleDifference;
 
 	void Start () {
+		GameGridRadiusInitial = 50;
 		GameGridRadius = 50;
 		GameMaxScaleDifference = 10;
 
 		floors = new List<GameObject>();
 		InvokeRepeating("CreateFloor", 0f, 1f);
 
-		maxCookies = 40;
+		maxCookies = 80;
 		InvokeRepeating("CreateCookie", 2.0f, 0.3f);
 		InvokeRepeating("CreateCookie", 2.0f, 2f);
 		
-		maxPowerups = 10;
+		maxPowerups = 20;
 		InvokeRepeating("CreatePowerup", 2.0f, 0.3f);
 		InvokeRepeating("CreatePowerup", 2.0f, 2f);
 
-		maxRocks = 100;
+		maxRocks = 200;
 		InvokeRepeating("CreateRock", 2.0f, 0.03f);
 		InvokeRepeating("CreateRock", 2.0f, 2f);
 
-		maxBombs = 10;
+		maxBombs = 30;
 		InvokeRepeating("CreateBomb", 2.0f, 0.03f);
 		InvokeRepeating("CreateBomb", 2.0f, 10f);
 
@@ -60,7 +62,9 @@ public class Game : MonoBehaviour {
         }
 	}
 
-	void updateFixed () {
+	void FixedUpdate () {
+		GameGridRadius = GameGridRadiusInitial * Mathf.Round(player.transform.localScale.x);
+
 		Debug.Log(player.transform.localScale.x);
 		Debug.Log(GameGridRadius);
 
@@ -79,12 +83,16 @@ public class Game : MonoBehaviour {
 		var playerPos = player.transform.localPosition;
 
 		var floorsInRadius = 1f;
-		var floorScale = 100f;
+		var floorScale = GameGridRadius * 2;
 		var playerClosestX = Mathf.Round(playerPos.x / floorScale) * floorScale;
 		var playerClosestZ = Mathf.Round(playerPos.z / floorScale) * floorScale;
 		
-		// Destroy floors out of range
+		// Destroy floors out of range and scale the current ones to current scale
 		foreach(var floorInstance in floors.ToArray()){
+			if(0.1 * floorInstance.transform.localScale.x < floorScale) {
+				floorInstance.transform.localScale = new Vector3(0.1f * floorScale, 0.1f, 0.1f * floorScale);
+			}
+
 			var floorInstancePos = floorInstance.transform.localPosition;
 			if(
 				floorInstancePos.x < playerClosestX - floorsInRadius * floorScale
