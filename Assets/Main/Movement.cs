@@ -10,11 +10,6 @@ public class Movement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         speed = 10;
-
-
-        // AnimationHelper.Animate(Time.time, 3.0f, (t) => {
-        // 	transform.localPosition = Vector3.Lerp(Vector3.zero, 100f * Vector3.one, EasingFunctions.easeOut(t));
-        // });
     }
 
     void FixedUpdate()
@@ -22,6 +17,6 @@ public class Movement : MonoBehaviour
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
         Vector3 movement = new Vector3(moveHorizontal, 0f, moveVertical);
-        rb.AddForce(movement * Mathf.Round(gameObject.transform.localScale.x) * speed);
+        rb.AddForce(movement * gameObject.transform.localScale.x * speed);
     }
 }

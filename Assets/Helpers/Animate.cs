@@ -56,18 +56,20 @@ public class Animate : MonoBehaviour {
     static private IEnumerator PositionAddTransform(GameObject obj, Vector3 addedPosition, float duration){
         float elapsedTime = 0;
         int count = 0;
+        Vector3 objStartPos = obj.transform.localPosition;
+
         while (elapsedTime <= duration && obj)
         {
 
             // obj.transform.localScale = Vector3.Lerp(obj.transform.localPosition, obj.transform.localPosition + addedPosition, elapsedTime / duration);
-            obj.transform.localScale = Vector3.Lerp(obj.transform.localPosition, addedPosition, elapsedTime / duration);
+            obj.transform.localScale = Vector3.Lerp(objStartPos, addedPosition, elapsedTime / duration);
             // Debug.Log(obj.transform.localScale);
             elapsedTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
             count += 1;
         }
         
-        if(obj) obj.transform.localPosition = obj.transform.localPosition + addedPosition;
+        if(obj) obj.transform.localPosition = objStartPos + addedPosition;
     }
 
     static public Coroutine Pulse(GameObject obj, float scale, float speed, float duration)

@@ -24,7 +24,7 @@ public class Game : MonoBehaviour
     public GameObject floor;
     public List<GameObject> floors;
 
-    const int maxEnemies = 80;
+    const int maxEnemies = 20;
     GameObject enemy;
 
     public float GameGridRadiusInitial;
@@ -35,7 +35,7 @@ public class Game : MonoBehaviour
     {
         GameGridRadiusInitial = 50;
         GameGridRadius = 50;
-        GameMaxScaleDifference = 10;
+        GameMaxScaleDifference = 5;
 
         enemy = Resources.Load("Enemy") as GameObject;
 
@@ -78,8 +78,8 @@ public class Game : MonoBehaviour
     {
         GameGridRadius = GameGridRadiusInitial * Mathf.Round(player.transform.localScale.x);
 
-        Debug.Log(player.transform.localScale.x);
-        Debug.Log(GameGridRadius);
+        // Debug.Log(player.transform.localScale.x);
+        // Debug.Log(GameGridRadius);
 
         if (player.transform.localScale.x * GameGridRadius > floor.transform.localScale.x)
         {
@@ -165,7 +165,7 @@ public class Game : MonoBehaviour
             newEnemy.name = "Cookie";
             newEnemy.tag = "Cookie";
 
-            float enemyScale = Random.Range(0.3f * playerScale, 3f * playerScale);
+            float enemyScale = Random.Range(0.3f * playerScale, 1-3f * playerScale);
             Animate.Scale(newEnemy, new Vector3(enemyScale, enemyScale, enemyScale));
 
             // var cookieSphereCollider = newEnemy.gameObject.GetComponent<SphereCollider>(); 

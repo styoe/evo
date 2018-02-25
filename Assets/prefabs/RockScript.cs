@@ -28,7 +28,7 @@ public class RockScript : MonoBehaviour
         float totalDuration = 4;
 
         Animate.Scale(gameObject, new Vector3(0f, 0f, 0f), totalDuration);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(totalDuration);
 
         Destroy(gameObject);
     }

@@ -30,18 +30,26 @@ public class CameraPositionOnPlayerScale : MonoBehaviour {
 		var spotY = spotLight.transform.position.y;
 		var playerScale = Mathf.Round(player.transform.localScale.x);
 
-		if(cameraY < playerScale * 3){
-			Animate.PositionAdd(mainCamera, new Vector3(0, 0.1f, 0));
+		if(cameraY < Mathf.Round(playerScale) * 20){
+			mainCamera.transform.position = mainCamera.transform.position + new Vector3(0, 0.1f, 0);
 		}
 
-		if(spotY < playerScale * 3 - playerScale * 0.1 ){
-			Animate.PositionAdd(spotLight, new Vector3(0, 0.1f, 0));
-			Animate.PositionAdd(VisionLight, new Vector3(0, 0.1f, 0));
+		if(cameraY < Mathf.Round(playerScale) * 15){
+			spotLight.transform.position = spotLight.transform.position + new Vector3(0, 0.1f, 0);
+			VisionLight.transform.position = VisionLight.transform.position + new Vector3(0, 0.1f, 0);
 
 			spotLightLight.range = cameraY + 5;
 			visionLightLight.range = cameraY + 35;
-			Animate.PositionAdd(spotLight, new Vector3(0, 0.1f, 0));			
 		}
+
+		// if(spotY < playerScale * 3 - playerScale * 0.1 ){
+		// 	Animate.PositionAdd(spotLight, new Vector3(0, 0.1f, 0));
+		// 	Animate.PositionAdd(VisionLight, new Vector3(0, 0.1f, 0));
+
+		// 	spotLightLight.range = cameraY + 5;
+		// 	visionLightLight.range = cameraY + 35;
+		// 	Animate.PositionAdd(spotLight, new Vector3(0, 0.1f, 0));			
+		// }
 	}
 
 	static private IEnumerator TransformRange(Light light, int value, float duration){

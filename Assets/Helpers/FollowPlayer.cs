@@ -29,7 +29,7 @@ public class FollowPlayer : MonoBehaviour
         if (player && Vector3.Distance(transform.position, player.transform.position) < distance)
         {
             var direction = player.transform.position - transform.position;
-            rigidbody.AddForce(direction.normalized * speed * Time.smoothDeltaTime);
+            rigidbody.AddForce(direction.normalized * speed * Time.smoothDeltaTime * player.transform.localScale.x);
         }
     }
 }

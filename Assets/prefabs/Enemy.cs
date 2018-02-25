@@ -2,7 +2,6 @@
 using UnityEngine.AI;
 
 [RequireComponent(typeof(Rigidbody))]
-// [RequireComponent(typeof(NavMeshAgent))]
 public class Enemy : MonoBehaviour
 {
     // NavMeshAgent agent;
